@@ -37,9 +37,7 @@ class DefaultControllerTest extends WebTestCase
     public function testHomepageIsLoginUser()
     {
         $this->logIn(['ROLE_USER']);
-
         $this->client->request('GET', '/');
-
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertContains("Bienvenue sur Todo List, l'application vous permettant de gérer l'ensemble de vos tâches sans effort !", $this->client->getResponse()->getContent());
     }
