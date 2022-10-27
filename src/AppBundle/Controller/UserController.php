@@ -50,8 +50,7 @@ class UserController extends Controller
     public function editAction(User $user, Request $request)
     {
         $user = $this->getUser();
-        dump($user);
-        die;
+
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);

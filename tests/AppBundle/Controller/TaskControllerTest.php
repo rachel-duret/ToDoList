@@ -3,7 +3,6 @@
 namespace Tests\AppBundle\Controller;
 
 use AppBundle\Entity\Task;
-use AppBundle\Form\TaskType;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -35,20 +34,21 @@ class TaskControllerTest extends WebTestCase
 
     public function testTaskPageUserNotLogin()
     {
-        $this->client->request('GET', '/');
+        $this->client->request('GET', '/tasks');
 
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testListAction()
+    public function testTaskListAction()
     {
         $this->repository->findAll();
         $this->logIn(['ROLE_USER']);
         $this->client->request('GET', '/tasks');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertContains("Supprimer", $this->client->getResponse()->getContent());
     }
 
-    public function testCreateAction()
+    public function testTaskCreateAction()
     {
         // show the create page
         $this->logIn(['ROLE_USER']);
@@ -57,26 +57,29 @@ class TaskControllerTest extends WebTestCase
 
         // submit create form
         $form = $crawler->selectButton('Ajouter')->form();
-        $form['task[title]'] = 'title';
+        $form['task[title]'] = ' this is a title';
         $form['task[content]'] = 'content';
+
+
         $this->client->submit($form);
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
 
         // redirect to task list page
         $this->client->followRedirect();
         $this->assertContains("La tâche a été bien été ajoutée.", $this->client->getResponse()->getContent());
+        $this->assertContains("this is a title", $this->client->getResponse()->getContent());
     }
 
-    public function testEditAction()
+    public function testTaskEditAction()
     {
         // show the edit page
         $this->logIn(['ROLE_USER']);
-        $crawler = $this->client->request('GET', '/tasks/1/edit');
+        $crawler = $this->client->request('GET', '/tasks/14/edit');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
 
         //submit edit Task
         $form = $crawler->selectButton('Modifier')->form();
-        $form['task[title]'] = 'title';
+        $form['task[title]'] = ' update title';
         $form['task[content]'] = 'content';
         $this->client->submit($form);
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
@@ -84,18 +87,19 @@ class TaskControllerTest extends WebTestCase
         // redirect task list page
         $this->client->followRedirect();
         $this->assertContains("La tâche a bien été modifiée.", $this->client->getResponse()->getContent());
+        $this->assertContains("update title", $this->client->getResponse()->getContent());
     }
 
-    public function testToggleAction()
+    public function testTaskToggleAction()
     {
         $this->logIn(['ROLE_USER']);
-        $this->client->request('GET', '/tasks/1/toggle');
+        $this->client->request('GET', '/tasks/14/toggle');
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
         $this->client->followRedirect();
-        $this->assertContains(" La tâche title a bien été marquée comme faite.", $this->client->getResponse()->getContent());
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testDeleteAction()
+    public function testTaskDeleteAction()
     {
         $this->logIn(['ROLE_USER']);
         // Id just can be test once
