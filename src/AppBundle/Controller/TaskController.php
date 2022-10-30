@@ -4,19 +4,12 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Task;
 use AppBundle\Form\TaskType;
-use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 class TaskController extends Controller
 {
-    private $em;
-
-    public function __construct(EntityManagerInterface $em)
-    {
-        $this->em = $em;
-    }
     /**
      * @Route("/tasks", name="task_list")
      */
@@ -36,9 +29,10 @@ class TaskController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
 
-            $this->em->persist($task);
-            $this->em->flush();
+            $em->persist($task);
+            $em->flush();
 
             $this->addFlash('success', 'La tâche a été bien été ajoutée.');
 
@@ -58,7 +52,7 @@ class TaskController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->flush();
+            $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', 'La tâche a bien été modifiée.');
 
@@ -77,7 +71,7 @@ class TaskController extends Controller
     public function toggleTaskAction(Task $task)
     {
         $task->toggle(!$task->isDone());
-        $this->em->flush();
+        $this->getDoctrine()->getManager()->flush();
 
         $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
 
@@ -89,8 +83,9 @@ class TaskController extends Controller
      */
     public function deleteTaskAction(Task $task)
     {
-        $this->em->remove($task);
-        $this->em->flush();
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($task);
+        $em->flush();
 
         $this->addFlash('success', 'La tâche a bien été supprimée.');
 
