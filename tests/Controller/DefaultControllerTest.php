@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Controller;
+namespace Tests\AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
@@ -10,7 +10,7 @@ class DefaultControllerTest extends WebTestCase
 {
     private $client = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         //create http client 
         $this->client = static::createClient();

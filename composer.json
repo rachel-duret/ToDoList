@@ -34,12 +34,14 @@
         "symfony/asset": "4.0.*",
         "symfony/security-bundle": "4.0.*",
         "symfony/apache-pack": "^1.0",
-        "symfony/maker-bundle": "*"
+        "symfony/maker-bundle": "*",
+        "symfony/browser-kit": "4.0.*"
     },
     "require-dev": {
         "symfony/phpunit-bridge": "^4.0",
         "symfony/stopwatch": "4.0.*",
-        "symfony/web-profiler-bundle": "4.0.*"
+        "symfony/web-profiler-bundle": "4.0.*",
+        "phpunit/phpunit": "8.5.28"
 
        
     },

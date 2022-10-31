@@ -10,7 +10,7 @@ class UserControllerTest extends WebTestCase
 {
     private $client = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         //create http client 
         $this->client = static::createClient();
@@ -39,7 +39,7 @@ class UserControllerTest extends WebTestCase
 
     public function testUserListAction()
     {
-        $this->logIn(['ROLE_USER']);
+
         $crawler = $this->client->request('GET', '/users');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertContains("Liste des utilisateurs", $this->client->getResponse()->getContent());
@@ -49,7 +49,7 @@ class UserControllerTest extends WebTestCase
     public function testUserCreateAction()
     {
         // show the create page
-        $this->logIn(['ROLE_USER']);
+
         $crawler = $this->client->request('GET', '/users/create');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
 
