@@ -1,2 +1,0 @@
-services:
-doctrine.orm.default_entity_manager: "@Doctrine\ORM\EntityManager"
