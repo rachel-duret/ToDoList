@@ -14,9 +14,8 @@ security:
       security: false
 
     main:
-      anonymous: ~
+      anonymous: lazy
       pattern: ^/
-      logout_on_user_change: true
       form_login:
         login_path: login
         check_path: login_check
