@@ -29,5 +29,10 @@ services:
     resource: '../src/Controller'
     tags: ['controller.service_arguments']
 
+  custom_doctrine_orm_naming_strategy_underscore:
+    class: Doctrine\ORM\Mapping\UnderscoreNamingStrategy
+    arguments:
+      - 0
+      - true
   # add more service definitions when explicit configuration is needed
   # please note that last definitions always *replace* previous ones

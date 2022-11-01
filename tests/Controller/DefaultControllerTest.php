@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\AppBundle\Controller;
+namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
@@ -14,10 +14,6 @@ class DefaultControllerTest extends WebTestCase
     {
         //create http client 
         $this->client = static::createClient();
-        /*  $this->userRepository = $this->client->getContainer()->get('doctrine')->getRepository(User::class);
-        $this->user = $this->userRepository->findOneByEmail('admin@mail.com');
-        $urlGenerator = $this->client->getContainer()->get('router');
-        $this->client->loginUser($this->user); */
     }
 
     private function logIn(array $role)
@@ -37,9 +33,9 @@ class DefaultControllerTest extends WebTestCase
     public function testHomepageIsLoginUser()
     {
         $this->logIn(['ROLE_USER']);
-        $this->client->request('GET', '/');
+        $crawler = $this->client->request('GET', '/');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertContains("Bienvenue sur Todo List, l'application vous permettant de gérer l'ensemble de vos tâches sans effort !", $this->client->getResponse()->getContent());
+        $this->assertStringContainsString("Bienvenue sur Todo List, l'application vous permettant de gérer l'ensemble de vos tâches sans effort !", $crawler->filter('h1')->text());
     }
 
     public function testHomepageUserNotLogin()

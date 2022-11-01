@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Controller;
+namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
@@ -16,19 +16,6 @@ class UserControllerTest extends WebTestCase
         $this->client = static::createClient();
     }
 
-    private function logIn(array $role)
-    {
-        $session = $this->client->getContainer()->get('session');
-        $firewallName = 'main';
-        $firewallContext = 'main';
-        $token = new UsernamePasswordToken('user', null, $firewallName, $role);
-
-        $session->set('_security_' . $firewallContext, serialize($token));
-        $session->save();
-
-        $cookie = new Cookie($session->getName(), $session->getId());
-        $this->client->getCookieJar()->set($cookie);
-    }
 
     public function testUserPageUserNotLogin()
     {
@@ -42,8 +29,8 @@ class UserControllerTest extends WebTestCase
 
         $crawler = $this->client->request('GET', '/users');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertContains("Liste des utilisateurs", $this->client->getResponse()->getContent());
-        $this->assertContains("#", $crawler->filter('th')->text());
+        $this->assertStringContainsString("Liste des utilisateurs", $this->client->getResponse()->getContent());
+        $this->assertStringContainsString("#", $crawler->filter('th')->text());
     }
 
     public function testUserCreateAction()
@@ -65,15 +52,13 @@ class UserControllerTest extends WebTestCase
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
 
         // redirect to user list page
-        $this->client->followRedirect();
-        $this->assertContains("L'utilisateur a bien été ajouté.", $this->client->getResponse()->getContent());
-        $this->assertContains("username test", $this->client->getResponse()->getContent());
+        $this->assertStringContainsString("L'utilisateur a bien été ajouté.",  $this->client->getResponse()->getStatusCode());
+        $this->assertStringContainsString("username test",  $this->client->getResponse()->getStatusCode());
     }
 
     public function testUserEditAction()
     {
         // show the edit page
-        $this->logIn(['ROLE_USER']);
         $crawler = $this->client->request('GET', '/users/6/edit');
 
         /* **************

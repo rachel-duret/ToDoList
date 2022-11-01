@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Controller;
+namespace App\Tests\Controller;
 
-
+use App\Entity\Task;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -11,7 +11,7 @@ class TaskControllerTest extends WebTestCase
 {
     private $client = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         //create http client 
         $this->client = static::createClient();
