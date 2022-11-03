@@ -1,6 +1,7 @@
 security:
-  encoders:
-    App\Entity\User: bcrypt
+  password_hashers:
+    App\Entity\User:
+      algorithm: 'auto'
 
   providers:
     doctrine:
@@ -8,13 +9,15 @@ security:
         class: App\Entity\User
         property: username
 
+  enable_authenticator_manager: true
+
   firewalls:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
 
     main:
-      anonymous: lazy
+      lazy: true
       pattern: ^/
       form_login:
         login_path: login
