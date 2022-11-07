@@ -40,7 +40,8 @@
         "twig/twig": "^2.12|^3.0",
         "symfony/swiftmailer-bundle": "^3.5",
         "symfony/error-handler": "5.4.*",
-        "doctrine/doctrine-migrations-bundle": "^3.2"
+        "doctrine/doctrine-migrations-bundle": "^3.2",
+        "symfony/runtime": "5.4.*"
     },
     "require-dev": {
         "symfony/phpunit-bridge": "5.4.*",
@@ -74,7 +75,8 @@
     },
     "config": {
         "allow-plugins": {
-            "symfony/flex": true
+            "symfony/flex": true,
+            "symfony/runtime": true
         }
     }
 }
