@@ -156,16 +156,16 @@
         ]
     },
     "symfony/routing": {
-        "version": "4.0",
+        "version": "5.4",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
-            "version": "4.0",
-            "ref": "22715e3fd48c861b6390ccb16f3aa6d1cd6a58e5"
+            "version": "5.3",
+            "ref": "85de1d8ae45b284c3c84b668171d2615049e698f"
         },
         "files": [
-            "./config/packages/prod/routing.yaml",
-            "./config/routes.yaml"
+            "config/packages/routing.yaml",
+            "config/routes.yaml"
         ]
     },
     "symfony/security-bundle": {
