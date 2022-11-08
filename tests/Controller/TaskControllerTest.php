@@ -5,8 +5,6 @@ namespace App\Tests\Controller;
 use App\Entity\Task;
 use App\Tests\Trait\LoginTest;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\BrowserKit\Cookie;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class TaskControllerTest extends WebTestCase
 {
