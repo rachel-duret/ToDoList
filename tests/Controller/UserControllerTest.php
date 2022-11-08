@@ -42,24 +42,26 @@ class UserControllerTest extends WebTestCase
 
         // submit create form
         $form = $crawler->selectButton('Ajouter')->form();
-        $form['user[username]'] = 'username test';
+        $form['user[username]'] = 'username1 test';
         $form['user[password][first]'] = 'passwordtest';
         $form['user[password][second]'] = 'passwordtest';
-        $form['user[email]'] = 'email@mail.com';
+        $form['user[email]'] = 'username1test@mail.com';
 
 
         $this->client->submit($form);
-        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+        $this->assertResponseRedirects('/users');
+        $this->client->followRedirect();
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertSelectorTextContains("div.alert.alert-success", "L'utilisateur a bien été ajouté.");
 
         // redirect to user list page
-        $this->assertStringContainsString("L'utilisateur a bien été ajouté.",  $this->client->getResponse()->getStatusCode());
-        $this->assertStringContainsString("username test",  $this->client->getResponse()->getStatusCode());
+        $this->assertSelectorTextContains("table", "username1 test");
     }
 
     public function testUserEditAction()
     {
         // show the edit page
-        $crawler = $this->client->request('GET', '/users/6/edit');
+        $crawler = $this->client->request('GET', '/users/18/edit');
 
         /* **************
         Failed asserting that 500 matches expected 200. je ne sais pas pourquio
@@ -68,16 +70,17 @@ class UserControllerTest extends WebTestCase
 
         //submit edit user
         $form = $crawler->selectButton('Modifier')->form();
-        $form['user[username]'] = 'admin update';
+        $form['user[username]'] = 'username0test';
         $form['user[password][first]'] = 'passwordtest';
         $form['user[password][second]'] = 'passwordtest';
-        $form['user[email]'] = 'admin@mail.com';
+        $form['user[email]'] = 'username0test@mail.com';
         $this->client->submit($form);
-        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
-
-        // redirect user list page
+        $this->assertResponseRedirects('/users');
         $this->client->followRedirect();
-        $this->assertContains(" L'utilisateur a bien été modifié", $this->client->getResponse()->getContent());
-        $this->assertContains("username update", $this->client->getResponse()->getContent());
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertSelectorTextContains("div.alert.alert-success", " L'utilisateur a bien été modifié");
+
+        // redirect to user list page
+        $this->assertSelectorTextContains("table", "username0test");
     }
 }
