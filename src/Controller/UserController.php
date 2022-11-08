@@ -4,24 +4,28 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserController extends AbstractController
 {
-    /**
-     * @Route("/users", name="user_list")
-     */
-    public function listAction()
+    public function __construct(private readonly UserPasswordHasherInterface $passwordHasher)
     {
-        return $this->render('user/list.html.twig', ['users' => $this->getDoctrine()->getRepository(User::class)->findAll()]);
+    }
+    #[Route(path: '/users', name: 'user_list')]
+    public function listAction(UserRepository $userRepository): Response
+    {
+        return $this->render('user/list.html.twig', ['users' => $userRepository->findAll()]);
     }
 
-    /**
-     * @Route("/users/create", name="user_create")
-     */
-    public function createAction(Request $request)
+    #[Route(path: '/users/create', name: 'user_create')]
+    public function createAction(Request $request, EntityManagerInterface $em): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -29,8 +33,7 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $password = $this->get('security.password_encoder')->encodePassword($user, $user->getPassword());
+            $password = $this->passwordHasher->hashPassword($user, $user->getPassword());
             $user->setPassword($password);
 
             $em->persist($user);
@@ -44,22 +47,18 @@ class UserController extends AbstractController
         return $this->render('user/create.html.twig', ['form' => $form->createView()]);
     }
 
-    /**
-     * @Route("/users/{id}/edit", name="user_edit")
-     */
-    public function editAction(User $user, Request $request)
+    #[Route(path: '/users/{id}/edit', name: 'user_edit')]
+    public function editAction(User $user, Request $request, EntityManagerInterface $em): Response
     {
-        $user = $this->getUser();
-
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $this->get('security.password_encoder')->encodePassword($user, $user->getPassword());
+            $password = $this->passwordHasher->hashPassword($user, $user->getPassword());
             $user->setPassword($password);
 
-            $this->getDoctrine()->getManager()->flush();
+            $em->flush();
 
             $this->addFlash('success', "L'utilisateur a bien été modifié");
 
