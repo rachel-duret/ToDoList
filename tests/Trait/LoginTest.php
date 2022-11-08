@@ -4,7 +4,6 @@ namespace App\Tests\Trait;
 
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 
 trait LoginTest
