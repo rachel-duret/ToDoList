@@ -6,7 +6,6 @@ use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,8 +26,8 @@ class UserController extends AbstractController
     #[Route(path: '/users/create', name: 'user_create')]
     public function createAction(Request $request, EntityManagerInterface $em): Response
     {
-        $loggedUser = $this->getUser();
-        if (!$loggedUser || $loggedUser->getRoles() !== 'ROLE_ADMIN') {
+
+        if (!in_array('ROLE_ADMIN', $this->getUser()->getRoles())) {
             $this->addFlash('danger', "page not found .");
             return $this->redirectToRoute('user_list');
         }
@@ -40,7 +39,6 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $password = $this->passwordHasher->hashPassword($user, $user->getPassword());
             $user->setPassword($password);
-            $user->setRoles(['ROLE_USER']);
 
             $em->persist($user);
             $em->flush();
@@ -56,6 +54,13 @@ class UserController extends AbstractController
     #[Route(path: '/users/{id}/edit', name: 'user_edit')]
     public function editAction(User $user, Request $request, EntityManagerInterface $em): Response
     {
+
+        if (!in_array('ROLE_ADMIN', $this->getUser()->getRoles())) {
+            $this->addFlash('danger', "page not found .");
+            return $this->redirectToRoute('user_list');
+        }
+
+
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
