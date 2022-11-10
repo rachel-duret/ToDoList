@@ -31,6 +31,10 @@ class Task
     #[ORM\Column()]
     private ?bool $isDone = null;
 
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    // #[ORM\JoinColumn(nullable: true)]
+    private ?User $User = null;
+
     public function __construct()
     {
         $this->createdAt = new \Datetime();
@@ -80,5 +84,17 @@ class Task
     public function toggle(bool $flag): void
     {
         $this->isDone = $flag;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->User;
+    }
+
+    public function setUser(?User $User): self
+    {
+        $this->User = $User;
+
+        return $this;
     }
 }
