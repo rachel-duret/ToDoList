@@ -27,6 +27,11 @@ class UserController extends AbstractController
     #[Route(path: '/users/create', name: 'user_create')]
     public function createAction(Request $request, EntityManagerInterface $em): Response
     {
+        $loggedUser = $this->getUser();
+        if (!$loggedUser || $loggedUser->getRoles() !== 'ROLE_ADMIN') {
+            $this->addFlash('danger', "page not found .");
+            return $this->redirectToRoute('user_list');
+        }
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
 
@@ -35,6 +40,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $password = $this->passwordHasher->hashPassword($user, $user->getPassword());
             $user->setPassword($password);
+            $user->setRoles(['ROLE_USER']);
 
             $em->persist($user);
             $em->flush();
