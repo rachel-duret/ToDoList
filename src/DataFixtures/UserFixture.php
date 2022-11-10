@@ -9,21 +9,40 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixture extends Fixture
 {
-    private $userPasswordHasher;
-    public function __construct(UserPasswordHasherInterface $userPasswordHasher)
+    public function __construct(private UserPasswordHasherInterface $userPasswordHasher)
     {
-        $this->userPasswordHasher = $userPasswordHasher;
     }
     public function load(ObjectManager $manager): void
     {
-        for ($i = 0; $i < 10; $i++) {
-            $user = new User();
-            $user->setUsername('username' . $i);
-            $user->setPassword($this->userPasswordHasher->hashPassword($user, "password"));
-            $user->setEmail("username$i@mail.com");
-            $manager->persist($user);
-        }
+        $userAnonyme = new User();
+        $userAnonyme->setUsername('anonyme');
+        $userAnonyme->setPassword($this->userPasswordHasher->hashPassword($userAnonyme, "password"));
+        $userAnonyme->setEmail("anonyme@mail.com");
+        $userAnonyme->setRoles(['ROLE_USER']);
+        $manager->persist($userAnonyme);
+
+        $userAdmin = new User();
+        $userAdmin->setUsername('admin');
+        $userAdmin->setPassword($this->userPasswordHasher->hashPassword($userAdmin, "password"));
+        $userAdmin->setEmail("admin@mail.com");
+        $userAdmin->setRoles(['ROLE_ADMIN']);
+        $manager->persist($userAdmin);
+
+
+
+
+        $user = new User();
+        $user->setUsername('username');
+        $user->setPassword($this->userPasswordHasher->hashPassword($user, "password"));
+        $user->setEmail("username@mail.com");
+        $user->setRoles(['ROLE_USER']);
+        $manager->persist($user);
+
 
         $manager->flush();
+
+        $this->addReference('user_anonyme', $userAnonyme);
+        $this->addReference('user_admin', $userAdmin);
+        $this->addReference('user', $user);
     }
 }

@@ -6,8 +6,8 @@ use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,6 +27,11 @@ class UserController extends AbstractController
     #[Route(path: '/users/create', name: 'user_create')]
     public function createAction(Request $request, EntityManagerInterface $em): Response
     {
+
+        if (!in_array('ROLE_ADMIN', $this->getUser()->getRoles())) {
+            $this->addFlash('danger', "page not found .");
+            return $this->redirectToRoute('user_list');
+        }
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
 
@@ -50,6 +55,13 @@ class UserController extends AbstractController
     #[Route(path: '/users/{id}/edit', name: 'user_edit')]
     public function editAction(User $user, Request $request, EntityManagerInterface $em): Response
     {
+
+        if (!in_array('ROLE_ADMIN', $this->getUser()->getRoles())) {
+            $this->addFlash('danger', "page not found .");
+            return $this->redirectToRoute('user_list');
+        }
+
+
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
