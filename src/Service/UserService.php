@@ -5,13 +5,17 @@ namespace App\Service;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\UserRepository;
-use Symfony\Component\Form\FormInterface;
+
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserService
 {
 
-    public function __construct(private EntityManagerInterface $em, private UserRepository $userRepository)
-    {
+    public function __construct(
+        private readonly EntityManagerInterface $em,
+        private readonly UserRepository $userRepository,
+        private readonly UserPasswordHasherInterface $passwordHasher
+    ) {
     }
 
     public function findAllUserService()
@@ -19,20 +23,21 @@ class UserService
         return $this->userRepository->findAll();
     }
 
-    public function creatUserService(User $user)
+    public function creatOneUserService(User $user)
     {
         $password = $this->passwordHasher->hashPassword($user, $user->getPassword());
         $user->setPassword($password);
-
+        dd($user);
+        exit;
         $this->em->persist($user);
-        $$this->em->flush();
+        $this->em->flush();
     }
 
-    public function editUserService(User $user)
+    public function editOneUserService(User $user)
     {
         $password = $this->passwordHasher->hashPassword($user, $user->getPassword());
         $user->setPassword($password);
-
+        //dd($user);
         $this->em->flush();
     }
 }
