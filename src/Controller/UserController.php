@@ -4,10 +4,8 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
-use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,65 +13,67 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserController extends AbstractController
 {
-    public function __construct(private readonly UserPasswordHasherInterface $passwordHasher)
-    {
+    public function __construct(
+        private readonly UserPasswordHasherInterface $passwordHasher,
+        private readonly UserService $userService
+    ) {
     }
+
+
+    /* **********User list********************************************* */
     #[Route(path: '/users', name: 'user_list')]
-    public function listAction(UserRepository $userRepository): Response
+    public function listAction(): Response
     {
-        return $this->render('user/list.html.twig', ['users' => $userRepository->findAll()]);
+        $users = $this->userService->findAllUserService();
+        return $this->render('user/list.html.twig', ['users' => $users]);
     }
 
-    #[Route(path: '/users/create', name: 'user_create')]
-    public function createAction(Request $request, EntityManagerInterface $em): Response
-    {
 
+
+    /* **********Create one user********************************************* */
+    #[Route(path: '/users/create', name: 'user_create')]
+    public function createAction(Request $request): Response
+    {
+        // Verify is Admin 
         if (!in_array('ROLE_ADMIN', $this->getUser()->getRoles())) {
             $this->addFlash('danger', "page not found .");
             return $this->redirectToRoute('user_list');
         }
+
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $this->passwordHasher->hashPassword($user, $user->getPassword());
-            $user->setPassword($password);
-
-            $em->persist($user);
-            $em->flush();
-
+            //Call UserService to insert data to database
+            $this->userService->creatOneUserService($user);
             $this->addFlash('success', "L'utilisateur a bien été ajouté.");
 
             return $this->redirectToRoute('user_list');
         }
-
         return $this->render('user/create.html.twig', ['form' => $form->createView()]);
     }
 
-    #[Route(path: '/users/{id}/edit', name: 'user_edit')]
-    public function editAction(User $user, Request $request, EntityManagerInterface $em): Response
-    {
 
+
+    /* **********Edit one User********************************************* */
+    #[Route(path: '/users/{id}/edit', name: 'user_edit')]
+    public function editAction(User $user, Request $request): Response
+    {
+        // Verify is Admin 
         if (!in_array('ROLE_ADMIN', $this->getUser()->getRoles())) {
             $this->addFlash('danger', "page not found .");
             return $this->redirectToRoute('user_list');
         }
 
-
         $form = $this->createForm(UserType::class, $user);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $this->passwordHasher->hashPassword($user, $user->getPassword());
-            $user->setPassword($password);
-
-            $em->flush();
+            //Call UserService to update  data to database
+            $this->userService->editOneUserService($user);
 
             $this->addFlash('success', "L'utilisateur a bien été modifié");
-
             return $this->redirectToRoute('user_list');
         }
 

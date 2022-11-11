@@ -25,11 +25,12 @@ class UserType extends AbstractType
             ])
             ->add('email', EmailType::class, ['label' => 'Adresse email'])
             ->add('roles', ChoiceType::class, [
-                'multiple' => true,
+                'label' => 'Role:',
                 'expanded' => true,
+                'multiple' => true,
                 'choices' => [
-                    'ROLE_USER' => 'ROLE_USER',
-                    'ROLE_ADMIN' => 'ROLE_ADMIN'
+                    'USER' => 'ROLE_USER',
+                    'ADMIN' => 'ROLE_ADMIN'
                 ]
             ]);
     }
