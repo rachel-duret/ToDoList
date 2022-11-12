@@ -27,8 +27,6 @@ class UserService
     {
         $password = $this->passwordHasher->hashPassword($user, $user->getPassword());
         $user->setPassword($password);
-        dd($user);
-        exit;
         $this->em->persist($user);
         $this->em->flush();
     }
