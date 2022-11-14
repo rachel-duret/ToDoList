@@ -36,6 +36,8 @@ class TaskControllerTest extends WebTestCase
     }
 
     /* *******************************CREATE ACTION******************************************** */
+
+
     public function testTaskCreateAction()
     {
         // show the create page
@@ -103,7 +105,7 @@ class TaskControllerTest extends WebTestCase
     public function testOneTaskToggleNotExit()
     {
         $this->getLoggedUser($this->client);
-        $this->client->request('GET', '/tasks/400/edit');
+        $this->client->request('GET', '/tasks/400/toggle');
         $this->assertResponseRedirects('/tasks');
         $this->client->followRedirect();
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
@@ -113,7 +115,7 @@ class TaskControllerTest extends WebTestCase
     public function testOneTaskToggleNotOwner()
     {
         $this->getLoggedUser($this->client);
-        $this->client->request('GET', '/tasks/41/edit');
+        $this->client->request('GET', '/tasks/41/toggle');
         $this->assertResponseRedirects('/tasks');
         $this->client->followRedirect();
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
@@ -154,20 +156,20 @@ class TaskControllerTest extends WebTestCase
     {
 
         $this->getLoggedUser($this->client);
-        $this->client->request('GET', '/tasks/41/edit');
+        $this->client->request('GET', '/tasks/41/delete');
         $this->assertResponseRedirects('/tasks');
         $this->client->followRedirect();
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         // $this->assertSelectorTextContains("div.alert.alert-danger", "Vous n'avez pas le droit de supprimer la tâche.");
     }
 
+
     public function testDeleteOneTaskAnnoymNotAdmin()
     {
         $this->userRepository = $this->client->getContainer()->get('doctrine')->getRepository(User::class);
-
         $this->user = $this->userRepository->findOneByEmail('username@mail.com');
-
         $this->client->loginUser($this->user);
+
         $this->client->request('GET', '/tasks/30/delete');
         $this->assertResponseRedirects('/tasks');
         $this->client->followRedirect();

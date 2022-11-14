@@ -44,7 +44,7 @@ class TaskService
         $this->em->flush();
     }
 
-    public function setOneTaskTogrle(object $task)
+    public function setOneTaskToggle(object $task)
     {
         $task->toggle(!$task->isDone());
         $this->em->flush();
