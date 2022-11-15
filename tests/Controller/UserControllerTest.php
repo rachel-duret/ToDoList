@@ -2,6 +2,7 @@
 
 namespace App\Tests\Controller;
 
+use App\DataFixtures\UserFixture;
 use App\Entity\User;
 use App\Tests\Trait\LoginTest;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
