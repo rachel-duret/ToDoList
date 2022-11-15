@@ -2,6 +2,7 @@
 
 namespace App\Tests\Entity;
 
+use App\Entity\Task;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -22,6 +23,16 @@ class UserTest extends KernelTestCase
         $user->setRoles(['ROLR_USER']);
 
         return $user;
+    }
+
+    public function getTaskEntity()
+    {
+        $task = new Task();
+        $task->setTitle('task1');
+        $task->setContent('task content');
+        $task->setUser($this->getUserEntity());
+
+        return $task;
     }
 
     public function testUserEntityIsValid()
@@ -58,5 +69,12 @@ class UserTest extends KernelTestCase
         $errors = $this->container->get('validator')->validate($user);
 
         $this->assertCount(1, $errors);
+    }
+
+    public function testGetTasks()
+    {
+        $task = $this->getUserEntity()->getTasks();
+        dump($task);
+        $this->assertIsArray($task);
     }
 }
