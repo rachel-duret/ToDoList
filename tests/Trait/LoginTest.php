@@ -12,7 +12,7 @@ trait LoginTest
     {
         $this->userRepository = $client->getContainer()->get('doctrine')->getRepository(User::class);
 
-        $this->user = $this->userRepository->findOneByEmail('username0@mail.com');
+        $this->user = $this->userRepository->findOneByEmail('admin@mail.com');
 
         return $this->client->loginUser($this->user);
     }

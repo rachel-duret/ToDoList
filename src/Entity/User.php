@@ -26,6 +26,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $username = null;
 
     #[ORM\Column(length: 64)]
+    #[Assert\NotBlank(message: "Vous devez saisir un password d'utilisateur.")]
+    #[Assert\Length(min: 6, max: 50, minMessage: " Password minimun {{ limit }} caracteres", maxMessage: "Password maximun{{ limit }} caracteres")]
     private ?string $password = null;
 
     #[ORM\Column(length: 60, unique: true)]

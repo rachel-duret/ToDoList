@@ -32,9 +32,6 @@ class TaskController extends AbstractController
     public function createAction(Request $request): Response
     {
         $loggedUser = $this->getUser();
-        if (!$loggedUser) {
-            return $this->redirectToRoute('login');
-        }
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
@@ -95,7 +92,7 @@ class TaskController extends AbstractController
             $this->addFlash('danger', "Vous n'avez pas le droit de modifier la tâche.");
             return $this->redirectToRoute('task_list');
         }
-        $this->taskService->setOneTaskTogrle($task);
+        $this->taskService->setOneTaskToggle($task);
 
         $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
 
@@ -116,7 +113,7 @@ class TaskController extends AbstractController
         }
 
         //check logged user is same as task's owner
-        if ($this->getUser() !== $task->getUser() && !$task->getUser()->getUsername() === 'anonyme') {
+        if ($this->getUser() !== $task->getUser() && $task->getUser()->getUsername() !== 'anonyme') {
             $this->addFlash('danger', "Vous n'avez pas le droit de supprimer la tâche.");
             return $this->redirectToRoute('task_list');
         }

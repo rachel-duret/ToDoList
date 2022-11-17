@@ -23,6 +23,14 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertStringContainsString("Bienvenue sur Todo List, l'application vous permettant de gérer l'ensemble de vos tâches sans effort !", $crawler->filter('h1')->text());
     }
+    public function testHomepageIsLoginWithAdmin()
+    {
+        $this->getLoggedUser($this->client);
+        $this->client->request('GET', '/');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertSelectorTextContains("a.btn.btn-primary", "Créer un utilisateur");
+    }
+
 
     public function testHomepageUserNotLogin()
     {

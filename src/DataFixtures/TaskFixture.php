@@ -22,6 +22,21 @@ class TaskFixture extends Fixture implements DependentFixtureInterface
             $manager->persist($task);
         }
 
+        $taskA = new Task();
+        $taskA->setTitle('taskAdminTitle');
+        $taskA->setContent('taskAdminContent');
+        $taskA->isDone(0);
+        $taskA->setCreatedAt(new DateTime());
+        $taskA->setUser($this->getReference('user_admin'));
+        $manager->persist($taskA);
+
+        $taskB = new Task();
+        $taskB->setTitle('taskUserTitle');
+        $taskB->setContent('taskUserContent');
+        $taskB->isDone(0);
+        $taskB->setCreatedAt(new DateTime());
+        $taskB->setUser($this->getReference('user'));
+        $manager->persist($taskB);
 
         $manager->flush();
     }
