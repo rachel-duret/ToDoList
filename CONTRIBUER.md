@@ -77,7 +77,7 @@ ToDoList repository and on your own fork.
 
 ### Step 3: Work on the project:
 
-1. Install the project by following the README.md file.
+1. Run the project by following the README.md file.
 2. Navigate to you project directory.
 3. Create a new branch. Using a short, remenberable name for this branch
 4. Push your new branch to you repository
@@ -91,13 +91,12 @@ ToDoList repository and on your own fork.
 
 On this page, make sure that the base fork points to the right repository and branch. In this example, the base fork should be rachel-duret/ToDoList , compare should be which is on the branch on which you selected to base your changes.
 
-The primary head fork should be YOUR-GITHUB-USERNAME/ToDoList (your fork copy of ToDoList) and the comparison branch should be "my-new-feature", which is the name of the branch you created and where you made your changes.
+The primary head fork should be GITHUB-USERNAME/ToDoList (your fork copy of ToDoList) and the comparison branch should be "my-new-feature", which is the name of the branch you created and where you made your changes.
 
 Next, make sure you provide a good short title for your pull request and explain why you created it in the description box. Add any issues  numbers if you have any.
 ```
 
 2. Submit the Pull request
-3. Review by "Revisers"
 
 ## Coding standars and quality process
 
