@@ -4,42 +4,78 @@ Base du projet #8 : Améliorez un projet existant
 
 https://openclassrooms.com/projects/ameliorer-un-projet-existant-1 Package
 
-## 3 to 4:
+# P8_ToDoList Upgraded by ChunCheungDuret
+
+## About the Project
+
+ToDolist it's an application builded by PHP framework Symfony with version 3.1,
+but this version is no longer maintained , so the application needs to upgrade.
+
+### This project needs
+
+- Implementation more new features to perpetuatethe development of the
+  application.
+- Make an inventory of the application's technical Produce a code audit on
+  following code quality and performance.
+
+## Application upgraded to:
 
 ```
-    Remove doctrine/doctrine-cache-bundle. It's already  abandoned
-    Remove Package doctrine/reflection It's already  abandoned,  Use roave/better-reflection instead.
-    Remove swiftmailer/swiftmailer It's already  abandoned,  Use symfony/mailer instead.
-    Remove Package symfony/swiftmailer-bundle It's already  abandoned, Use symfony/mailer instead.
+-PHP 8.1
+-Composer
+-Symfony 6.1
 ```
 
-### Composer require symfony/flex
+## Requirements
 
-    ```
-    Follow the symfony/skeleton to confige composer jsopn-> https://github.com/symfony/skeleton/blob/4.0/composer.json
-    copy to composer require
-     "symfony/console": "*",
-        "symfony/dotenv": "*",
-        "symfony/framework-bundle": "*",
-        "symfony/yaml": "*"
-    copy to composer to replace "extra": and "symfony"
-     "scripts": {
-        "auto-scripts": [
-        ],
-        "post-install-cmd": [
-            "@auto-scripts"
-        ],
-        "post-update-cmd": [
-            "@auto-scripts"
-        ]
-    },
-    "conflict": {
-        "symfony/symfony": "*"
-    },
-    "extra": {
-        "symfony": {
-            "allow-contrib": false,
-            "require": "4.0.*"
-        }
-    }
-    after install symfony/flex this are new folders in the app,
+```
+-PHP >= 8.1
+-Web server
+-Composer >= 2.3.10
+-Symfony >= 6.1
+-Mysql >= 5.7.24`
+-phpunit = 9
+```
+
+## Installation
+
+-Installation and Configuration for web server. Here I'm using MAMP
+[MAMP](https://www.mamp.info/en/downloads/)
+
+-Clone the repo [ProjetRepo](https://github.com/rachel-duret/ToDoList.git)
+
+1. Symfony install [Symfony](https://symfony.com/doc/current/setup.html)
+2. Get into your project directory start your web server -Install libraries
+3. composer install
+4. Set up the database
+5. -Create .env.local file following .env file to configure the appropriates
+   values
+
+### To run the test
+
+```
+- to run all the test following  the command:
+   vendor/bin/phpunit
+
+- to run a sigle  test following  the command:
+   vendor/bin/phpunit --filter=<methodName>
+
+- to generate coverage of test  following  the command:
+   vendor/bin/phpunit --coverage-html public/test-coverage
+
+```
+
+[ Phpunit documentation ](https://phpunit.de/documentation.html)
+[ Symfony test](https://symfony.com/doc/current/testing.html)
+
+### Demo data
+
+-To Add some demo data run command : php bin/console doctrine:fixtures:load
+
+### Authors
+
+-[@RachelDuret](https://github.com/rachel-duret)
+
+### Badges
+
+[Codacy](https://app.codacy.com/gh/rachel-duret/ToDoList/dashboard?branch=main)
