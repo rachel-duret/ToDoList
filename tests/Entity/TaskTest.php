@@ -35,6 +35,6 @@ class TaskTest extends KernelTestCase
 
         $errors = $this->container->get('validator')->validate($user);
 
-        $this->assertCount(0, $errors);
+        $this->assertCount(1, $errors);
     }
 }

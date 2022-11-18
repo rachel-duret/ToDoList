@@ -51,7 +51,7 @@ class TaskRepositoryTest extends KernelTestCase
         $this->assertIsArray($tasks);
     }
 
-    public function testRemoveOneTaskWithoutFlush()
+    /*  public function testRemoveOneTaskWithoutFlush()
     {
         $task =  $this->taskRepository->findOneBy(['title' => 'taskAdminTitle']);
         $this->entityManager->remove($task);
@@ -65,5 +65,5 @@ class TaskRepositoryTest extends KernelTestCase
         $this->entityManager->remove($task);
         $this->entityManager->flush();
         $this->assertSame(null, $task->getId());
-    }
+    } */
 }

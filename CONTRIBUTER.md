@@ -2,12 +2,12 @@
 
 ## How to contribute :
 
-Enhance an existing Symfony application frome ToDo&Co. This is an application to
+Enhance an existing Symfony application from ToDo&Co. This is an application to
 manage daily tasks. Following the steps below to contribute the project:
 
 ### Step 1: Setup technical Requirements
 
-Before contribuer this project you must:
+Before contributer this project you must:
 
 - Install PHP 8.1 or higher PHP extensions
 

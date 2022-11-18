@@ -40,8 +40,7 @@ class TaskService
 
     public function deleteOneTaskService(Object $task)
     {
-        $this->em->remove($task);
-        $this->em->flush();
+        $this->taskRepository->remove($task, true);
     }
 
     public function setOneTaskToggle(object $task)

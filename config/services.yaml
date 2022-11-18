@@ -29,6 +29,10 @@ services:
     resource: '../src/Controller'
     tags: ['controller.service_arguments']
 
+  App\Service\:
+    resource: '../src/Service'
+    public: true
+
   custom_doctrine_orm_naming_strategy_underscore:
     class: Doctrine\ORM\Mapping\UnderscoreNamingStrategy
     arguments:

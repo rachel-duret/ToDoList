@@ -4,66 +4,75 @@ namespace App\Tests\Service;
 
 use App\Entity\Task;
 use App\Entity\User;
+use App\Service\TaskService;
 use App\Tests\Trait\LoginTest;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class TaskServiceTest extends WebTestCase
+
+class TaskServiceTest extends KernelTestCase
 {
     use LoginTest;
+    private $taskService;
+    private $taskRepository;
+
 
     public function setUp(): void
     {
-        //create http client 
-        $this->client = static::createClient();
-        $this->taskRepository = $this->client->getContainer()->get('doctrine')->getRepository(Task::class);
-        $this->em = $this->client->getContainer()->get('doctrine.orm.default_entity_manager');
+        $kernel = self::bootKernel();
+        $this->entityManager = $kernel->getContainer()
+            ->get('doctrine')
+            ->getManager();
+        $this->taskRepository = $kernel->getContainer()->get('doctrine')->getRepository(Task::class);
+        $this->userRepository = $kernel->getContainer()->get('doctrine')->getRepository(User::class);
+        $this->taskService = $kernel->getContainer()->get(TaskService::class);
     }
 
-    public function testFindAllUserService()
+    public function testFindAllTaskService()
     {
 
-        $tasks = $this->taskRepository->count([]);
-        $this->assertEquals(12, $tasks);
+        $tasks = $this->taskService->findAllTaskService();
+        $this->assertIsArray($tasks);
     }
 
     public function testCreateOneTaskService()
     {
-        $this->userRepository = $this->client->getContainer()->get('doctrine')->getRepository(User::class);
+
 
         $this->user = $this->userRepository->findOneByEmail('username@mail.com');
         $task = new Task();
         $task->setTitle('task');
         $task->setContent('task content');
-        $task->setUser($this->user);
-        $this->em->persist($task);
-        $this->em->flush();
+        $this->taskService->createOneTaskService($task, $this->user);
         $this->assertEquals('task', $task->getTitle());
+        $this->assertEquals($this->user, $task->getUser());
+        $this->assertNotNull($this->taskRepository->findById($task->getId()));
     }
 
     public function testEditOneTaskService()
     {
-        $task = new Task();
+
+        $task = $this->taskService->findOneTaskService(30);
+
         $task->setTitle('taskup');
         $task->setContent('task content');
-        $this->em->flush();
+        $this->taskService->editOneTaskService();
         $this->assertEquals('taskup', $task->getTitle());
     }
 
     public function testDeleteOneTaskService()
     {
 
-        $task = $this->taskRepository->find(40);
+        $task = $this->taskService->findOneTaskService(40);
 
-        $this->em->remove($task);
-        $this->em->flush();
+        $this->taskService->deleteOneTaskService($task);
         $this->assertEquals(null, $task->getId());
     }
 
+
     public function testSetOneTaskToggleService()
     {
-        $task = $this->taskRepository->find(39);
-        $task->isDone(false);
-        $this->em->flush();
-        $this->assertEquals(false, $task->isDone());
+        $task = $this->taskService->findOneTaskService(30);
+        $this->taskService->setOneTaskToggle($task);
+        $this->assertEquals(true, $task->isDone());
     }
 }
