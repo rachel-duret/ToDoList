@@ -3,28 +3,33 @@
 namespace App\Tests\Service;
 
 use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\UserService;
+use App\Tests\Trait\LoginTest;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher;
 
-class UserServiceTest extends WebTestCase
+class UserServiceTest extends KernelTestCase
 {
-    private EntityManagerInterface $em;
+    use LoginTest;
+    private $taskService;
+    private $taskRepository;
+
 
     public function setUp(): void
     {
-        //create http client 
-        $this->client = static::createClient();
-        $this->userRepository = $this->client->getContainer()->get('doctrine')->getRepository(User::class);
-        $this->em = $this->client->getContainer()->get('doctrine.orm.default_entity_manager');
+        $kernel = self::bootKernel();
+        $this->entityManager = $kernel->getContainer()
+            ->get('doctrine')
+            ->getManager();
+        $this->userRepository = $kernel->getContainer()->get('doctrine')->getRepository(User::class);
+        $this->userService = $kernel->getContainer()->get(UserService::class);
     }
+
 
     public function testFindAllUserService()
     {
 
-        $users = $this->userRepository->count([]);
-        $this->assertEquals(3, $users);
+        $users = $this->userService->findAllUserService();
+        $this->assertIsArray($users);
     }
 
     public function testCreateOneUserService()
@@ -34,9 +39,10 @@ class UserServiceTest extends WebTestCase
         $user->setPassword('passwordtest');
         $user->setEmail('username1test@mail.com');
         $user->setRoles(["ROLE_USER"]);
-        $this->em->persist($user);
-        $this->em->flush();
+        $this->userService->creatOneUserService($user);
         $this->assertEquals('username1 test', $user->getUsername());
+        $this->assertEquals('username1test@mail.com', $user->getEmail());
+        $this->assertNotNull($this->userRepository->findById($user->getId()));
     }
 
     public function testEditOneUserService()
@@ -46,8 +52,7 @@ class UserServiceTest extends WebTestCase
         $user->setPassword('passwordtest');
         $user->setEmail('username1test@mail.com');
         $user->setRoles(["ROLE_USER"]);
-        $this->em->persist($user);
-        $this->em->flush();
+        $this->userService->editOneUserService($user);
         $this->assertEquals('username up', $user->getUsername());
     }
 }

@@ -20,8 +20,8 @@ class SecurityControllerTest extends WebTestCase
 
         //submit edit Task
         $form = $crawler->selectButton('Se connecter')->form();
-        $form['_username'] = 'admin';
-        $form['_password'] = 'password';
+        $form['username'] = 'admin';
+        $form['password'] = 'password';
 
 
         $this->client->submit($form);
@@ -38,8 +38,8 @@ class SecurityControllerTest extends WebTestCase
 
         //submit edit Task
         $form = $crawler->selectButton('Se connecter')->form();
-        $form['_username'] = 'admin';
-        $form['_password'] = 'passwordnotgood';
+        $form['username'] = 'admin';
+        $form['password'] = 'passwordnotgood';
 
 
         $this->client->submit($form);

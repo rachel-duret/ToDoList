@@ -71,10 +71,9 @@ class UserTest extends KernelTestCase
         $this->assertCount(1, $errors);
     }
 
-    public function testGetTasks()
+    /*  public function testGetTasks()
     {
         $task = $this->getUserEntity()->getTasks();
-        dump($task);
         $this->assertIsArray($task);
-    }
+    } */
 }
