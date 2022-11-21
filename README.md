@@ -77,17 +77,3 @@
 ### Badges
 
 [Codacy](https://app.codacy.com/gh/rachel-duret/ToDoList/dashboard?branch=main)
-
-<style>
-    h1{
-        color: #043959;
-    },
-
-    h2{
-        color: #135e96 ;
-    },
-
-    p{
-        background: #dcdcde;
-    }
-</style>

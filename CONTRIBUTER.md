@@ -117,17 +117,3 @@ ToDoList repository and on your own fork.
   on the performance
 
 ##### Thank you for your contribuer.
-
-<style>
-    h1{
-        color: #043959;
-    },
-
-    h2{
-        color: #135e96 ;
-    },
-
-    p{
-        background: #dcdcde;
-    }
-</style>
