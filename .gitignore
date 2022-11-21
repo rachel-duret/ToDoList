@@ -23,6 +23,7 @@
 
 ###> symfony/framework-bundle ###
 /.env
+/.enc.test
 /.env.local
 /.env.local.php
 /.env.*.local
