@@ -27,6 +27,15 @@ class TaskServiceTest extends KernelTestCase
         $this->taskService = $kernel->getContainer()->get(TaskService::class);
     }
 
+    public function testFindOneTaskService()
+    {
+        $task = $this->taskService->findOneTaskService(40);
+        $this->assertEquals('taskAdminTitle', $task->getTitle());
+        $this->assertEquals('taskAdminContent', $task->getContent());
+        $this->assertEquals(40, $task->getId());
+    }
+
+
     public function testFindAllTaskService()
     {
 

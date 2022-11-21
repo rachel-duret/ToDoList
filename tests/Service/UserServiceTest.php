@@ -10,7 +10,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class UserServiceTest extends KernelTestCase
 {
     use LoginTest;
-    private $taskService;
     private $taskRepository;
 
 
@@ -24,6 +23,14 @@ class UserServiceTest extends KernelTestCase
         $this->userService = $kernel->getContainer()->get(UserService::class);
     }
 
+
+    public function testFindOneUserService()
+    {
+        $user = $this->userService->findOneUserService(16);
+        $this->assertEquals('admin', $user->getUsername());
+        $this->assertEquals('admin@mail.com', $user->getEmail());
+        $this->assertEquals(16, $user->getId());
+    }
 
     public function testFindAllUserService()
     {

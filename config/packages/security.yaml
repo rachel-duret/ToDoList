@@ -32,6 +32,8 @@ security:
   access_control:
     - { path: ^/login, roles: PUBLIC_ACCESS }
     - { path: ^/users, roles: ROLE_USER }
+    - { path: ^/tasks, roles: ROLE_USER }
+    - { path: ^/tasks/create, roles: ROLE_USER }
     - { path: ^/users/create, roles: ROLE_ADMIN }
     - { path: ^/users/edit, roles: ROLE_ADMIN }
     - { path: ^/, roles: ROLE_USER }

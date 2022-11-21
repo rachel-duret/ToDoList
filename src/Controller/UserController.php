@@ -58,8 +58,13 @@ class UserController extends AbstractController
 
     /* **********Edit one User********************************************* */
     #[Route(path: '/users/{id}/edit', name: 'user_edit')]
-    public function editAction(User $user, Request $request): Response
+    public function editAction(int $id, Request $request): Response
     {
+        $user = $this->userService->findOneUserService($id);
+        if (empty($user)) {
+            $this->addFlash('danger', 'Page not found');
+            return $this->redirectToRoute('user_list');
+        }
         // Verify is Admin 
         if (!in_array('ROLE_ADMIN', $this->getUser()->getRoles())) {
             $this->addFlash('danger', "page not found .");

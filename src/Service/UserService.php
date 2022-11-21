@@ -18,6 +18,11 @@ class UserService
     ) {
     }
 
+    public function findOneUserService(int $id)
+    {
+        return $this->userRepository->find($id);
+    }
+
     public function findAllUserService()
     {
         return $this->userRepository->findAll();
