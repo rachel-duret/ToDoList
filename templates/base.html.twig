@@ -7,9 +7,19 @@
 			{% block title %}Welcome!
 			{% endblock %}
 		</title>
-		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-		<link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-		<link href="{{ asset('css/shop-homepage.css') }}" rel="stylesheet">
+		<link
+		rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+
+
+		{# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+		{% block stylesheets %}
+			<link href="{{ asset('css/shop-homepage.css') }}" rel="stylesheet">
+			<link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+		{% endblock %}
+
+		{% block javascripts %}
+			{{ encore_entry_script_tags('app') }}
+		{% endblock %}
 	</head>
 
 	<body>
@@ -29,17 +39,20 @@
 		<!-- Page Content -->
 		<div class="container">
 			<div class="row">
-				{% if app.user and app.user.roles==["ROLE_ADMIN","ROLE_USER"] %}
-					<a href="{{ path('user_create') }}" class="btn btn-primary">Créer un utilisateur</a>
-				{% endif %}
+				<div class="col-md-12 ">
+					{% if app.user and app.user.roles==["ROLE_ADMIN","ROLE_USER"] %}
+						<a href="{{ path('user_create') }}" class="btn btn-primary">Créer un utilisateur</a>
+					{% endif %}
 
-				{% if app.user %}
-					<a href="{{ path('logout') }}" class="pull-right btn btn-danger">Se déconnecter</a>
-				{% endif %}
+					{% if app.user %}
+						<a href="{{ path('logout') }}" class="pull-right btn btn-danger">Se déconnecter</a>
+					{% endif %}
 
-				{% if not app.user and 'login' != app.request.attributes.get('_route') %}
-					<a href="{{ path('login') }}" class="btn btn-success">Se connecter</a>
-				{% endif %}
+					{% if not app.user and 'login' != app.request.attributes.get('_route') %}
+						<a href="{{ path('login') }}" class="btn btn-success">Se connecter</a>
+					{% endif %}
+				</div>
+
 			</div>
 
 			<div class="row">
@@ -59,34 +72,31 @@
 					{% endfor %}
 
 					{% block header_title %}{% endblock %}
-					{% block header_img %}<img class="slide-image" src="{{ asset('img/todolist_homepage.jpg') }}" alt="todo list">
+					{% block header_img %}<img class="slide-image " src="{{ asset('img/todolist_homepage.jpg') }}" alt="todo list">
 					{% endblock %}
 				</div>
 			</div>
 
 			<br/>
+			<!-- body -->
+			{% block body %}{% endblock %}
 
-			<div class="row">
-				<div class="col-md-12"> {% block body %}{% endblock %}
+		</div>
+
+		<div class="container">
+
+			<hr>
+			<footer>
+				<div class="row">
+					<div class="col-lg-12">
+						<p class="pull-right">Copyright &copy; OpenClassrooms</p>
 					</div>
 				</div>
-			</div>
-			<!-- /.container -->
+			</footer>
 
-			<div class="container">
+		</div>
 
-				<hr>
-				<footer>
-					<div class="row">
-						<div class="col-lg-12">
-							<p class="pull-right">Copyright &copy; OpenClassrooms</p>
-						</div>
-					</div>
-				</footer>
-
-			</div>
-
-			<script src="{{ asset('js/jquery.js') }}"></script>
-			<script src="{{ asset('js/bootstrap.min.js') }}"></script>
-		</body>
-	</html>
+		<script src="{{ asset('js/jquery.js') }}"></script>
+		<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+	</body>
+</html></body></html>
