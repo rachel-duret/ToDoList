@@ -20,9 +20,20 @@ class TaskService
         return $this->taskRepository->find($id);
     }
 
+
     public function findAllTaskService()
     {
         return $this->taskRepository->findAll();
+    }
+
+    public function findAllFinishTaskService()
+    {
+        return $this->taskRepository->findBy(['isDone' => 1]);
+    }
+
+    public function findAllWaitingTaskService()
+    {
+        return $this->taskRepository->findBy(['isDone' => 0]);
     }
 
     public function createOneTaskService(Task $task, UserInterface $loggedUser)
