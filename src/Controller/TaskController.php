@@ -99,6 +99,23 @@ class TaskController extends AbstractController
         return $this->redirectToRoute('task_list');
     }
 
+
+
+    #[Route(path: '/tasks/finished', name: 'task_finished_list')]
+    public function taskfinishedList()
+    {
+        $tasksFinishedList = $this->taskService->findAllFinishTaskService();
+        return $this->render('task/list_finish.html.twig', ['tasks' =>   $tasksFinishedList]);
+    }
+
+    #[Route(path: '/tasks/waiting', name: 'task_waiting_list')]
+    public function taskwaitingList()
+    {
+        $tasksWaitingList = $this->taskService->findAllWaitingTaskService();
+        return $this->render('task/list_waiting.html.twig', ['tasks' =>   $tasksWaitingList]);
+    }
+
+
     #[Route(path: '/tasks/{id}/delete', name: 'task_delete')]
     public function deleteTaskAction(int $id): Response
     {

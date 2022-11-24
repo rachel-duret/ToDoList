@@ -3,7 +3,6 @@
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -17,11 +16,10 @@ class UserType extends AbstractType
     {
         $builder
             ->add('username', TextType::class, [
+                'label' => "Nom d'utilisateur",
                 'attr' => [
-                    'class' => 'form-control mb-3',
-                    'placeholder' => 'Username'
+                    'class' => 'form-control mb-5',
                 ],
-                'label' => "Nom d'utilisateur"
             ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
@@ -31,29 +29,26 @@ class UserType extends AbstractType
                 'second_options' => ['label' => 'Tapez le mot de passe à nouveau'],
                 'options' => [
                     'attr' => [
-                        'class' => 'form-control mb-3',
-                        'placeholder' => 'Password'
+                        'class' => 'form-control mb-5',
                     ],
                 ]
             ])
             ->add('email', EmailType::class, [
+                'label' => 'Adresse email',
                 'attr' => [
-                    'class' => 'form-control mb-3',
-                    'placeholder' => 'Email'
+                    'class' => 'form-control mb-5',
                 ],
-                'label' => 'Adresse email'
             ])
             ->add('roles', ChoiceType::class, [
-                'attr' => [
-                    'class' => ' mb-3',
-                ],
                 'label' => 'Role:',
+                'attr' => [
+                    'class' => ' mb-5',
+                ],
                 'expanded' => true,
                 'multiple' => true,
                 'choices' => [
                     'USER' => 'ROLE_USER',
-                    'ADMIN' => 'ROLE_ADMIN',
-
+                    'ADMIN' => 'ROLE_ADMIN'
                 ]
             ]);
     }

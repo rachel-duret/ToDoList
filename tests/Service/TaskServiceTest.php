@@ -41,7 +41,33 @@ class TaskServiceTest extends KernelTestCase
 
         $tasks = $this->taskService->findAllTaskService();
         $this->assertIsArray($tasks);
+        $this->assertClassHasAttribute('title', Task::class);
+        $this->assertClassHasAttribute('content', Task::class);
+        $this->assertClassHasAttribute('User', Task::class);
+        $this->assertClassHasAttribute('id', Task::class);
+        $this->assertClassHasAttribute('isDone', Task::class);
     }
+
+    public function testFindAllFinishTaskService()
+    {
+        $tasks = $this->taskService->findAllFinishTaskService();
+        $this->assertIsArray($tasks);
+        $this->assertClassHasAttribute('isDone', Task::class);
+        foreach ($tasks as $key) {
+            $this->assertEquals(1, $key->isDone());
+        }
+    }
+
+    public function testFindAllWaitingTaskService()
+    {
+        $tasks = $this->taskService->findAllWaitingTaskService();
+        $this->assertIsArray($tasks);
+        $this->assertClassHasAttribute('isDone', Task::class);
+        foreach ($tasks as $key) {
+            $this->assertEquals(0, $key->isDone());
+        }
+    }
+
 
     public function testCreateOneTaskService()
     {

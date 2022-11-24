@@ -26,13 +26,31 @@ class TaskControllerTest extends WebTestCase
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
     }
 
+    /* ***********************List Action************************** */
     public function testTaskListAction()
     {
         $this->getLoggedUser($this->client);
-        $this->repository->findAll();
         $this->client->request('GET', '/tasks');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertSelectorTextContains("h1", "Tâches Liste");
         $this->assertSelectorNotExists("div.alert.alert-warning", " Il n'y a pas encore de tâche enregistrée.");
+    }
+
+    public function testTaskFinishedList()
+    {
+        $this->getLoggedUser($this->client);
+        $this->client->request('GET', '/tasks/finished');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertSelectorTextContains("h1", "Tâches terminié Liste");
+    }
+
+
+    public function testTaskWaitingList()
+    {
+        $this->getLoggedUser($this->client);
+        $this->client->request('GET', '/tasks/waiting');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertSelectorTextContains("h1", "Tâches Liste D'attente");
     }
 
     /* *******************************CREATE ACTION******************************************** */
@@ -129,6 +147,7 @@ class TaskControllerTest extends WebTestCase
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
         $this->client->followRedirect();
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertSelectorTextContains("h1", "Tâches Liste");
     }
 
     /* *************************DELETE ACTION******************************************** */
@@ -144,7 +163,6 @@ class TaskControllerTest extends WebTestCase
     public function testDeleteOneTaskAction()
     {
         $this->getLoggedUser($this->client);
-        // Id just can be test once
         $this->client->request('GET', 'tasks/40/delete');
         $this->assertResponseRedirects('/tasks');
         $this->client->followRedirect();
@@ -160,7 +178,7 @@ class TaskControllerTest extends WebTestCase
         $this->assertResponseRedirects('/tasks');
         $this->client->followRedirect();
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        // $this->assertSelectorTextContains("div.alert.alert-danger", "Vous n'avez pas le droit de supprimer la tâche.");
+        $this->assertSelectorTextContains("h1", "Tâches Liste");
     }
 
 
