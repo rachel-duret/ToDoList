@@ -24,6 +24,11 @@ class UserController extends AbstractController
     #[Route(path: '/users', name: 'user_list')]
     public function listAction(): Response
     {
+        // Verify is Admin 
+        if (!in_array('ROLE_ADMIN', $this->getUser()->getRoles())) {
+            $this->addFlash('danger', "page not found .");
+            return $this->redirectToRoute('homepage');
+        }
         $users = $this->userService->findAllUserService();
         return $this->render('user/list.html.twig', ['users' => $users]);
     }
@@ -37,7 +42,7 @@ class UserController extends AbstractController
         // Verify is Admin 
         if (!in_array('ROLE_ADMIN', $this->getUser()->getRoles())) {
             $this->addFlash('danger', "page not found .");
-            return $this->redirectToRoute('user_list');
+            return $this->redirectToRoute('homepage');
         }
 
         $user = new User();
@@ -49,7 +54,7 @@ class UserController extends AbstractController
             $this->userService->creatOneUserService($user);
             $this->addFlash('success', "L'utilisateur a bien été ajouté.");
 
-            return $this->redirectToRoute('user_list');
+            return $this->redirectToRoute('homepage');
         }
         return $this->render('user/create.html.twig', ['form' => $form->createView()]);
     }
